@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "SemanticModel",
+    "displayName": "Оформление отчета"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "333574ba-3b7b-495e-9668-c573857c0e45"
+  }
+}

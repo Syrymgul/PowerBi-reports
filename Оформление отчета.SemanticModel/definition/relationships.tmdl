@@ -1,0 +1,9 @@
+relationship d9177a90-9f82-4e3b-b0e8-81d2d87ed715
+	joinOnDateBehavior: datePartOnly
+	fromColumn: data.Дата
+	toColumn: LocalDateTable_7b29385f-0051-4a93-8128-a56f1a7ed596.Date
+
+relationship 7007b96f-6544-1a31-81b0-e25ef8c1077c
+	fromColumn: data.Номенклатура
+	toColumn: ABC.Номенклатура
+

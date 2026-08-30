@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "Report",
+    "displayName": "Оформление отчета"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "d37846cd-21f4-48e0-b922-7769d6b5ce4e"
+  }
+}

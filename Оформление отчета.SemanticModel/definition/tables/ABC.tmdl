@@ -1,0 +1,54 @@
+table ABC
+	lineageTag: a64a2f40-2f7b-4b53-b6c1-df31cc766009
+
+	column Номенклатура
+		lineageTag: 5955721a-2978-48f2-9ffb-e3a3c2cf22b0
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: data[Номенклатура]
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Сумма продаж'
+		lineageTag: 9999a21b-c3f8-4469-a167-2df6111e03fc
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Сумма продаж]
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column Доля = DIVIDE(ABC[Сумма продаж], CALCULATE(SUM(ABC[Сумма продаж]), ALL(ABC)))
+		formatString: 0.00\ %;-0.00\ %;0.00\ %
+		lineageTag: 5374b681-064a-450e-9c5a-a08182c1e2ba
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Накопительная доля' = ```
+			
+			 VAR CurrentSales = ABC[Сумма продаж]
+			 VAR TotalSales = CALCULATE(SUM(ABC[Сумма продаж]), ALL(ABC))
+			 VAR CumSales = CALCULATE(SUM(ABC[Сумма продаж]), FILTER(ALL(ABC), ABC[Сумма продаж]>=CurrentSales))
+			 RETURN
+			 DIVIDE(CumSales, TotalSales)
+			```
+		formatString: 0.00\ %;-0.00\ %;0.00\ %
+		lineageTag: 154d9c93-b825-4838-b559-351e8e83efce
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column Категория = SWITCH(TRUE(), [Накопительная доля]<=0.7, "A", [Накопительная доля]<=0.95, "B", "C")
+		lineageTag: f8378bb5-3da6-4203-9f8a-4f0b68080abf
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	partition ABC = calculated
+		mode: import
+		source = SUMMARIZE(data, data[Номенклатура],"Сумма продаж",SUM(data[Количество]))
+
+	annotation PBI_Id = 7a6b493ed64647488d5420e6cd87bda8
+

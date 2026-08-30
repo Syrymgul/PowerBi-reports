@@ -1,0 +1,70 @@
+table data
+	lineageTag: a20f3acd-d91b-4bc6-a356-432f60057375
+
+	column Дата
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: 7e4b0b51-89ec-4655-95d1-e28d28dccad6
+		summarizeBy: none
+		sourceColumn: Дата
+
+		variation Изменение
+			isDefault
+			relationship: d9177a90-9f82-4e3b-b0e8-81d2d87ed715
+			defaultHierarchy: LocalDateTable_7b29385f-0051-4a93-8128-a56f1a7ed596.'Иерархия дат'
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column Склад
+		dataType: int64
+		formatString: 0
+		lineageTag: 998bce27-3c24-4460-9d52-0d833811e97f
+		summarizeBy: sum
+		sourceColumn: Склад
+
+		annotation SummarizationSetBy = Automatic
+
+	column Контрагент
+		dataType: string
+		lineageTag: 1ff25ffe-fc57-4605-8965-9761627c00c5
+		summarizeBy: none
+		sourceColumn: Контрагент
+
+		annotation SummarizationSetBy = Automatic
+
+	column Номенклатура
+		dataType: string
+		lineageTag: fbaf4ff0-eb69-4e51-a5ea-213e9379d80a
+		summarizeBy: none
+		sourceColumn: Номенклатура
+
+		annotation SummarizationSetBy = Automatic
+
+	column Количество
+		dataType: double
+		lineageTag: 8b6db8ea-265d-4429-b6bb-a94d8d9d1af8
+		summarizeBy: sum
+		sourceColumn: Количество
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	partition data = m
+		mode: import
+		source =
+				let
+				    Источник = Csv.Document(File.Contents("C:\Users\User\Downloads\data.csv"),[Delimiter=",", Columns=5, Encoding=65001, QuoteStyle=QuoteStyle.None]),
+				    #"Повышенные заголовки" = Table.PromoteHeaders(Источник, [PromoteAllScalars=true]),
+				    #"Измененный тип" = Table.TransformColumnTypes(#"Повышенные заголовки",{{"Дата", type date}, {"Склад", Int64.Type}, {"Контрагент", type text}, {"Номенклатура", type text}, {"Количество", type text}}),
+				    #"Замененное значение" = Table.ReplaceValue(#"Измененный тип",".",",",Replacer.ReplaceText,{"Количество"}),
+				    #"Измененный тип1" = Table.TransformColumnTypes(#"Замененное значение",{{"Количество", type number}})
+				in
+				    #"Измененный тип1"
+
+	annotation PBI_NavigationStepName = Навигация
+
+	annotation PBI_ResultType = Table
+
